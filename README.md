@@ -1,18 +1,16 @@
 # Social Science Research OS
 
-[![Tests](https://github.com/lazybuttrying/utility/actions/workflows/tests.yml/badge.svg)](https://github.com/lazybuttrying/utility/actions/workflows/tests.yml)
+[![Tests](https://github.com/lazybuttrying/ssro/actions/workflows/tests.yml/badge.svg)](https://github.com/lazybuttrying/ssro/actions/workflows/tests.yml)
 
 A three-layer multi-agent operating system for social science research.
 
 This repository is a **research infrastructure prototype**. It treats social science research not as a single monolithic task, but as a layered workflow with distinct responsibilities:
 
 - **Level 1: Governance** — decide what to study and preserve research memory
-- **Level 2: Research Work** — build theory, data, measurement, analysis, and synthesis
+- **Level 2: Research Work** — build theory, data, measurement, analysis, synthesis, and LaTeX outputs
 - **Level 3: Audit** — check reproducibility, robustness, and validity
 
 The goal is not to fully automate research. The goal is to make research workflows more **structured, reproducible, interpretable, and accountable**.
-
-> Recommended future repo name: `SSRO`
 
 ---
 
@@ -21,6 +19,7 @@ The goal is not to fully automate research. The goal is to make research workflo
 - `Tutorial/01_quickstart.md`
 - `Tutorial/02_outputs_walkthrough.md`
 - `docs/implementation_checklist.md`
+- `docs/latex_workflow.md`
 
 ---
 
@@ -35,6 +34,7 @@ In real social science research, one person often has to do everything at once:
 - choose identification strategies
 - interpret results
 - document limitations and reproducibility
+- turn the same findings into paper and slide outputs
 
 That creates a familiar problem: theory, measurement, analysis, and audit often become loosely connected.
 
@@ -65,6 +65,7 @@ Responsible for the core empirical workflow.
 - measurement design
 - descriptive and causal analysis
 - writing and synthesis
+- paper and slide draft generation
 
 ### Level 3 — Audit
 Responsible for research trustworthiness.
@@ -92,6 +93,8 @@ The current example uses a small synthetic job-postings dataset and demonstrates
 - simple descriptive inequality analysis
 - figure export
 - working note generation
+- paper LaTeX draft generation
+- slides LaTeX draft generation
 - reproducibility and validity reporting
 
 This topic is only the **first application package**. The architecture is meant to be topic-agnostic and reusable for domains such as:
@@ -124,10 +127,10 @@ SSRO/
 
 ### Important folders
 
-- `research_os/` — core package for orchestration, storage, schemas, and agents
+- `research_os/` — core package for orchestration, storage, schemas, agents, skills, and templates
 - `Tutorial/` — guided walkthroughs for first-time readers
 - `applications/` — topic-specific application packages
-- `docs/` — architecture, agent responsibilities, measurement design, causal design, and implementation checklist
+- `docs/` — architecture, measurement, causal design, LaTeX workflow, and implementation checklist
 - `data/raw/` — starter input data
 - `outputs/` — generated artifacts from the pipeline
 - `tests/` — smoke tests and unit tests
@@ -146,6 +149,8 @@ SSRO/
 - `MeasurementAgent`
 - `IdentificationAnalysisAgent`
 - `WritingSynthesisAgent`
+- `PaperLaTeXSubagent`
+- `SlidesLaTeXSubagent`
 
 ### Level 3 — Audit
 - `ReproducibilityAgent`
@@ -157,6 +162,7 @@ A more detailed explanation is in:
 - `docs/agents.md`
 - `docs/measurement.md`
 - `docs/causal_design.md`
+- `docs/latex_workflow.md`
 - `docs/outputs.md`
 - `docs/demo_run.md`
 - `docs/implementation_checklist.md`
@@ -211,6 +217,14 @@ Running `python main.py` creates:
 - `outputs/figure_wage_by_ai_related.png`
 - `outputs/abstract_draft.txt`
 - `outputs/working_note.md`
+- `outputs/paper/main.tex`
+- `outputs/paper/config/`
+- `outputs/paper/sections/`
+- `outputs/paper/img/`
+- `outputs/slides/main.tex`
+- `outputs/slides/config/`
+- `outputs/slides/sections/`
+- `outputs/slides/img/`
 - `outputs/reproducibility_report.json`
 - `outputs/robustness_report.json`
 - `outputs/bias_validity_report.json`
@@ -241,7 +255,7 @@ This repository is useful if you want to demonstrate that you can:
 - separate governance, empirical work, and audit
 - build reproducible starter pipelines with intermediate outputs
 - think about measurement and validity, not only automation
-- export basic research artifacts such as figures, registries, and audit reports
+- export research artifacts as figures, registries, working notes, paper drafts, and slide drafts
 - back research artifacts with lightweight local data infrastructure using DuckDB
 
 In other words, this is not just an AI demo. It is a **research systems prototype**.
@@ -258,6 +272,7 @@ The current repository is intentionally minimal.
 - measurement is based on simple keyword proxies
 - audit is illustrative rather than exhaustive
 - Redis and retrieval helpers are scaffolding for future expansion rather than full production subsystems
+- LaTeX outputs are starter drafts, not publication-ready files
 
 That is acceptable for a starter repo, but the next stage should replace toy components with real research-grade modules.
 
@@ -265,13 +280,13 @@ That is acceptable for a starter repo, but the next stage should replace toy com
 
 ## Suggested next steps
 
-- rename the repository to `SSRO`
 - replace synthetic data with real job-postings or domain-specific data
 - add LLM-backed literature extraction and theory memo generation
 - add richer measurement protocols and codebooks
 - add causal designs such as event study, DiD, or matched comparisons
 - add report generation and figure exports
 - add provenance dashboards or experiment tracking
+- strengthen LaTeX formatting, tables, and bibliography handling
 
 ---
 
@@ -283,4 +298,4 @@ A concise way to describe this repository is:
 
 A slightly longer version:
 
-> **This project treats social science research as a workflow of theory-building, data construction, measurement, analysis, and audit, rather than as a single monolithic assistant task.**
+> **This project treats social science research as a workflow of theory-building, data construction, measurement, analysis, audit, and output rendering, rather than as a single monolithic assistant task.**
