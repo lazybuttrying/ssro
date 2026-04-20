@@ -10,6 +10,8 @@ This repository is a **research infrastructure prototype**. It treats social sci
 
 The goal is not to fully automate research. The goal is to make research workflows more **structured, reproducible, interpretable, and accountable**.
 
+> Recommended future repo name: `social-science-research-os`
+
 ---
 
 ## Why this project exists
@@ -189,6 +191,17 @@ Running `python main.py` creates:
 
 These files are meant to model a research workflow with explicit intermediate artifacts rather than just a final answer.
 
+### Example output
+
+A sample output walkthrough is available in:
+- `docs/demo_run.md`
+
+It includes example snippets for:
+- `analysis_results.json`
+- `provenance_log.json`
+
+This helps the repository read more like a research systems prototype and less like an empty scaffold.
+
 ---
 
 ## What this repository currently shows
@@ -221,6 +234,7 @@ That is acceptable for a starter repo, but the next stage should replace toy com
 
 ## Suggested next steps
 
+- rename the repository to `social-science-research-os`
 - replace synthetic data with real job-postings or domain-specific data
 - add LLM-backed literature extraction and theory memo generation
 - add richer measurement protocols and codebooks
