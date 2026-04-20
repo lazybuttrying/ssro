@@ -2,23 +2,68 @@
 
 A three-layer multi-agent operating system for social science research.
 
-This repository implements a minimal but runnable Research OS that separates:
+This repository is a **research infrastructure prototype**. It treats social science research not as a single monolithic task, but as a layered workflow with distinct responsibilities:
 
 - **Level 1: Governance** — decide what to study and preserve research memory
 - **Level 2: Research Work** — build theory, data, measurement, analysis, and synthesis
 - **Level 3: Audit** — check reproducibility, robustness, and validity
 
-The goal is not to fully automate social science research, but to structure it into accountable responsibilities with explicit intermediate outputs.
+The goal is not to fully automate research. The goal is to make research workflows more **structured, reproducible, interpretable, and accountable**.
+
+---
+
+## Why this project exists
+
+In real social science research, one person often has to do everything at once:
+
+- refine the research question
+- map prior literature
+- build datasets
+- operationalize abstract concepts
+- choose identification strategies
+- interpret results
+- document limitations and reproducibility
+
+That creates a familiar problem: theory, measurement, analysis, and audit often become loosely connected.
+
+This repository proposes a different approach:
+
+> **distribute research responsibility instead of pretending research is one task**
+
+The system is designed as a minimal **Research OS** for social science.
+
+---
 
 ## Core idea
 
-Instead of treating research as a single monolithic task, this system models it as a layered workflow:
+Instead of relying on a single all-purpose assistant, this system separates research into three layers:
 
-- governance
-- empirical work
-- audit
+### Level 1 — Governance
+Responsible for research direction and memory.
 
-This makes research workflows more structured, reproducible, and accountable.
+- define research goals
+- clarify the current stage of inquiry
+- keep track of decisions, versions, and changes
+
+### Level 2 — Research Work
+Responsible for the core empirical workflow.
+
+- literature and theory mapping
+- data construction
+- measurement design
+- descriptive and causal analysis
+- writing and synthesis
+
+### Level 3 — Audit
+Responsible for research trustworthiness.
+
+- reproducibility checks
+- robustness and sensitivity checks
+- bias and validity review
+
+This makes the system look less like a chatbot and more like a **layered operating system for research workflows**.
+
+---
 
 ## Current demo domain
 
@@ -26,17 +71,30 @@ This starter repository includes a toy application for:
 
 **Generative AI and labor-market inequality**
 
-The example uses a small synthetic job-postings dataset and demonstrates:
+The current example uses a small synthetic job-postings dataset and demonstrates:
 - data cleaning
 - variable construction
 - AI exposure measurement
 - simple descriptive inequality analysis
-- audit reports
+- reproducibility and validity reporting
+
+This topic is only the **first application package**. The architecture is meant to be topic-agnostic and reusable for domains such as:
+- labor markets
+- finance
+- digital inequality
+- platform governance
+- AI policy and evaluation
+
+---
 
 ## Repository layout
 
 ```text
 social-science-research-os/
+├─ README.md
+├─ requirements.txt
+├─ pyproject.toml
+├─ Makefile
 ├─ main.py
 ├─ configs/
 ├─ data/
@@ -46,14 +104,71 @@ social-science-research-os/
 └─ research_os/
 ```
 
+### Important folders
+
+- `research_os/` — core package for orchestration and agents
+- `docs/` — architecture, agent responsibilities, and outputs
+- `data/raw/` — starter input data
+- `outputs/` — generated artifacts from the pipeline
+- `tests/` — smoke tests and unit tests
+
+---
+
+## Agent architecture
+
+### Level 1 — Governance
+- `ResearchDirectorAgent`
+- `ProvenanceManager`
+
+### Level 2 — Research Work
+- `LiteratureTheoryAgent`
+- `DataConstructionAgent`
+- `MeasurementAgent`
+- `IdentificationAnalysisAgent`
+- `WritingSynthesisAgent`
+
+### Level 3 — Audit
+- `ReproducibilityAgent`
+- `RobustnessSensitivityAgent`
+- `BiasValidityAuditAgent`
+
+A more detailed explanation is in:
+- `docs/architecture.md`
+- `docs/agents.md`
+- `docs/outputs.md`
+
+---
+
 ## Quick start
+
+### 1. Create a virtual environment
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+```
+
+### 2. Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
+
+### 3. Run the pipeline
+
+```bash
 python main.py
 ```
+
+Or with the Makefile:
+
+```bash
+make install
+make run
+make test
+```
+
+---
 
 ## Generated outputs
 
@@ -72,28 +187,55 @@ Running `python main.py` creates:
 - `outputs/bias_validity_report.json`
 - `outputs/provenance_log.json`
 
-## Agents
+These files are meant to model a research workflow with explicit intermediate artifacts rather than just a final answer.
 
-### Level 1 — Governance
-- `ResearchDirectorAgent`
-- `ProvenanceManager`
+---
 
-### Level 2 — Research Work
-- `LiteratureTheoryAgent`
-- `DataConstructionAgent`
-- `MeasurementAgent`
-- `IdentificationAnalysisAgent`
-- `WritingSynthesisAgent`
+## What this repository currently shows
 
-### Level 3 — Audit
-- `ReproducibilityAgent`
-- `RobustnessSensitivityAgent`
-- `BiasValidityAuditAgent`
+This repository is useful if you want to demonstrate that you can:
+
+- design a multi-agent architecture for research rather than only for productivity demos
+- translate abstract social-scientific concepts into structured workflows
+- separate governance, empirical work, and audit
+- build reproducible starter pipelines with intermediate outputs
+- think about measurement and validity, not only automation
+
+In other words, this is not just an AI demo. It is a **research systems prototype**.
+
+---
+
+## Limitations
+
+The current repository is intentionally minimal.
+
+- the data are synthetic
+- the analysis is descriptive, not causal
+- the literature mapping is hand-coded rather than model-backed
+- measurement is based on simple keyword proxies
+- audit is illustrative rather than exhaustive
+
+That is acceptable for a starter repo, but the next stage should replace toy components with real research-grade modules.
+
+---
 
 ## Suggested next steps
 
-- replace synthetic data with real job-postings data
-- add LLM-backed literature extraction
-- add richer measurement protocols
-- add causal designs such as event study or DiD
-- add report generation or dashboarding
+- replace synthetic data with real job-postings or domain-specific data
+- add LLM-backed literature extraction and theory memo generation
+- add richer measurement protocols and codebooks
+- add causal designs such as event study, DiD, or matched comparisons
+- add report generation and figure exports
+- add provenance dashboards or experiment tracking
+
+---
+
+## Portfolio framing
+
+A concise way to describe this repository is:
+
+> **A three-layer multi-agent Research OS for social science that separates governance, empirical work, and audit.**
+
+A slightly longer version:
+
+> **This project treats social science research as a workflow of theory-building, data construction, measurement, analysis, and audit, rather than as a single monolithic assistant task.**
