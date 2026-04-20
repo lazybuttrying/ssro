@@ -1,7 +1,7 @@
 [project]
-name = "social-science-research-os"
+name = "ssro"
 version = "0.1.0"
-description = "A three-layer multi-agent Research OS for social science research"
+description = "SSRO: a three-layer multi-agent Research OS for social science"
 requires-python = ">=3.10"
 
 [tool.pytest.ini_options]
