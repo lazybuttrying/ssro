@@ -1,0 +1,11 @@
+id,title,industry,year,education,wage_posted,ai_related,skills_text
+1,Data Analyst,Technology,2022,Bachelor,70000,0,"SQL Excel dashboard reporting"
+2,Machine Learning Engineer,Technology,2024,Master,140000,1,"Python deep learning LLM evaluation MLOps"
+3,Customer Support Specialist,Services,2023,HighSchool,38000,1,"chat tools communication CRM"
+4,Research Assistant,Education,2022,Bachelor,42000,0,"literature review data cleaning Stata"
+5,Software Engineer,Technology,2025,Bachelor,130000,1,"Python API agents LangGraph Docker"
+6,Administrative Assistant,Services,2024,HighSchool,36000,1,"scheduling AI assistant office software"
+7,Economist,Finance,2025,Master,150000,1,"causal inference econometrics Python experimentation"
+8,Warehouse Associate,Logistics,2023,HighSchool,34000,0,"packing scanning shipping"
+9,Financial Analyst,Finance,2024,Bachelor,95000,1,"valuation reporting Excel Python AI research tools"
+10,Nurse Coordinator,Healthcare,2025,Bachelor,82000,0,"patient scheduling compliance records"
