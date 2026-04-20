@@ -1,0 +1,5 @@
+{
+  "project_name": "Social Science Research OS",
+  "demo_domain": "labor_market_inequality",
+  "data_path": "data/raw/sample_job_postings.csv"
+}
