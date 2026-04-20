@@ -14,6 +14,8 @@ from .agents.research_work import (
     IdentificationAnalysisAgent,
     LiteratureTheoryAgent,
     MeasurementAgent,
+    PaperLaTeXSubagent,
+    SlidesLaTeXSubagent,
     WritingSynthesisAgent,
 )
 from .types import ResearchTask
@@ -31,6 +33,8 @@ class ResearchOS:
         self.measurement = MeasurementAgent(output_dir)
         self.analysis = IdentificationAnalysisAgent(output_dir)
         self.writing = WritingSynthesisAgent(output_dir)
+        self.paper_latex = PaperLaTeXSubagent(output_dir)
+        self.slides_latex = SlidesLaTeXSubagent(output_dir)
         self.reproducibility = ReproducibilityAgent(output_dir)
         self.robustness = RobustnessSensitivityAgent(output_dir)
         self.bias_validity = BiasValidityAuditAgent(output_dir)
@@ -65,6 +69,14 @@ class ResearchOS:
         out = self.writing.run(task, self.context)
         self._store(out)
         self.provenance.record("writing_completed", {"abstract_length": len(out.payload["abstract"])})
+
+        out = self.paper_latex.run(task, self.context)
+        self._store(out)
+        self.provenance.record("paper_latex_completed", out.payload)
+
+        out = self.slides_latex.run(task, self.context)
+        self._store(out)
+        self.provenance.record("slides_latex_completed", out.payload)
 
         out = self.reproducibility.run(task, self.context)
         self._store(out)
