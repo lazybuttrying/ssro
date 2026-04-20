@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 from pathlib import Path
 from typing import Any, Dict
 
@@ -313,3 +314,118 @@ class WritingSynthesisAgent(BaseAgent):
         artifact_store.text("notes/summary.txt", "SSRO completed a minimal governance-work-audit run.")
 
         return AgentOutput(agent_name=self.name, payload={"abstract": abstract, "working_note_path": str(self.output_dir / 'working_note.md')})
+
+
+class PaperLaTeXSubagent(BaseAgent):
+    def __init__(self, output_dir):
+        super().__init__("PaperLaTeXSubagent", output_dir)
+
+    def run(self, task: ResearchTask, context: Dict[str, Any]) -> AgentOutput:
+        paper_root = self.output_dir / "paper"
+        sections_dir = paper_root / "sections"
+        config_dir = paper_root / "config"
+        img_dir = paper_root / "img"
+
+        sections_dir.mkdir(parents=True, exist_ok=True)
+        config_dir.mkdir(parents=True, exist_ok=True)
+        img_dir.mkdir(parents=True, exist_ok=True)
+
+        write_text(config_dir / "preamble.tex", "\\usepackage{graphicx}\n\\usepackage{booktabs}\n\\usepackage{amsmath}\n\\usepackage[margin=1in]{geometry}\n")
+
+        main_tex = """\\documentclass[11pt]{article}
+\\input{config/preamble}
+\\title{SSRO Working Paper Draft}
+\\author{SSRO}
+\\date{\\today}
+
+\\begin{document}
+\\maketitle
+
+\\input{sections/intro}
+\\input{sections/data}
+\\input{sections/measurement}
+\\input{sections/results}
+\\input{sections/limitations}
+
+\\end{document}
+"""
+        write_text(paper_root / "main.tex", main_tex)
+
+        figure_src = context.get("IdentificationAnalysisAgent", {}).get("figure_path")
+        figure_rel = None
+        if figure_src and Path(figure_src).exists():
+            figure_dst = img_dir / Path(figure_src).name
+            shutil.copy(Path(figure_src), figure_dst)
+            figure_rel = f"img/{figure_dst.name}"
+
+        working_note = context.get("WritingSynthesisAgent", {}).get("working_note_path", "")
+        intro_text = "\\section{Introduction}\nThis paper draft is generated from SSRO outputs.\n"
+        if working_note:
+            intro_text += "% Source working note: " + str(working_note) + "\n"
+        write_text(sections_dir / "intro.tex", intro_text)
+        write_text(sections_dir / "data.tex", "\\section{Data}\nThis section summarizes the input dataset and unit of observation.\n")
+        write_text(sections_dir / "measurement.tex", "\\section{Measurement}\nThis section documents variable construction and measurement choices.\n")
+
+        results_text = "\\section{Results}\nThis section summarizes the descriptive results and figure references.\n"
+        if figure_rel:
+            results_text += "\\begin{figure}[h]\n\\centering\n"
+            results_text += f"\\includegraphics[width=0.7\\textwidth]{{{figure_rel}}}\n"
+            results_text += "\\caption{Mean posted wage by AI-related posting.}\n\\end{figure}\n"
+        write_text(sections_dir / "results.tex", results_text)
+        write_text(sections_dir / "limitations.tex", "\\section{Limitations}\nThis section documents the current limitations of the starter pipeline.\n")
+
+        return AgentOutput(agent_name=self.name, payload={"paper_main_tex": str(paper_root / "main.tex")})
+
+
+class SlidesLaTeXSubagent(BaseAgent):
+    def __init__(self, output_dir):
+        super().__init__("SlidesLaTeXSubagent", output_dir)
+
+    def run(self, task: ResearchTask, context: Dict[str, Any]) -> AgentOutput:
+        slides_root = self.output_dir / "slides"
+        sections_dir = slides_root / "sections"
+        config_dir = slides_root / "config"
+        img_dir = slides_root / "img"
+
+        sections_dir.mkdir(parents=True, exist_ok=True)
+        config_dir.mkdir(parents=True, exist_ok=True)
+        img_dir.mkdir(parents=True, exist_ok=True)
+
+        write_text(config_dir / "theme.tex", "\\usetheme{Madrid}\n")
+
+        main_tex = """\\documentclass{beamer}
+\\input{config/theme}
+\\title{SSRO Slide Draft}
+\\author{SSRO}
+\\date{\\today}
+
+\\begin{document}
+\\frame{\\titlepage}
+\\input{sections/motivation}
+\\input{sections/data}
+\\input{sections/measurement}
+\\input{sections/results}
+\\input{sections/next_steps}
+\\end{document}
+"""
+        write_text(slides_root / "main.tex", main_tex)
+
+        figure_src = context.get("IdentificationAnalysisAgent", {}).get("figure_path")
+        figure_rel = None
+        if figure_src and Path(figure_src).exists():
+            figure_dst = img_dir / Path(figure_src).name
+            shutil.copy(Path(figure_src), figure_dst)
+            figure_rel = f"img/{figure_dst.name}"
+
+        write_text(sections_dir / "motivation.tex", "\\begin{frame}{Motivation}\n\\begin{itemize}\n\\item SSRO structures social science research into governance, work, and audit.\n\\end{itemize}\n\\end{frame}\n")
+        write_text(sections_dir / "data.tex", "\\begin{frame}{Data}\n\\begin{itemize}\n\\item Synthetic job-postings dataset for the starter demo.\n\\end{itemize}\n\\end{frame}\n")
+        write_text(sections_dir / "measurement.tex", "\\begin{frame}{Measurement}\n\\begin{itemize}\n\\item AI exposure and high-skill indicators are built from simple starter rules.\n\\end{itemize}\n\\end{frame}\n")
+
+        results_text = "\\begin{frame}{Results}\n\\begin{itemize}\n\\item AI-related postings show higher mean posted wages in the toy dataset.\n\\end{itemize}\n"
+        if figure_rel:
+            results_text += f"\\includegraphics[width=0.75\\textwidth]{{{figure_rel}}}\n"
+        results_text += "\\end{frame}\n"
+        write_text(sections_dir / "results.tex", results_text)
+        write_text(sections_dir / "next_steps.tex", "\\begin{frame}{Next Steps}\n\\begin{itemize}\n\\item Replace synthetic data with real data.\n\\item Add stronger causal designs.\n\\end{itemize}\n\\end{frame}\n")
+
+        return AgentOutput(agent_name=self.name, payload={"slides_main_tex": str(slides_root / "main.tex")})
