@@ -1,5 +1,7 @@
 # Social Science Research OS
 
+[![Tests](https://github.com/lazybuttrying/utility/actions/workflows/tests.yml/badge.svg)](https://github.com/lazybuttrying/utility/actions/workflows/tests.yml)
+
 A three-layer multi-agent operating system for social science research.
 
 This repository is a **research infrastructure prototype**. It treats social science research not as a single monolithic task, but as a layered workflow with distinct responsibilities:
@@ -78,6 +80,7 @@ The current example uses a small synthetic job-postings dataset and demonstrates
 - variable construction
 - AI exposure measurement
 - simple descriptive inequality analysis
+- figure export
 - reproducibility and validity reporting
 
 This topic is only the **first application package**. The architecture is meant to be topic-agnostic and reusable for domains such as:
@@ -109,7 +112,7 @@ SSRO/
 ### Important folders
 
 - `research_os/` — core package for orchestration and agents
-- `docs/` — architecture, agent responsibilities, and outputs
+- `docs/` — architecture, agent responsibilities, measurement design, causal design, and outputs
 - `data/raw/` — starter input data
 - `outputs/` — generated artifacts from the pipeline
 - `tests/` — smoke tests and unit tests
@@ -137,7 +140,10 @@ SSRO/
 A more detailed explanation is in:
 - `docs/architecture.md`
 - `docs/agents.md`
+- `docs/measurement.md`
+- `docs/causal_design.md`
 - `docs/outputs.md`
+- `docs/demo_run.md`
 
 ---
 
@@ -183,6 +189,7 @@ Running `python main.py` creates:
 - `outputs/measured_data.csv`
 - `outputs/codebook.json`
 - `outputs/analysis_results.json`
+- `outputs/figure_wage_by_ai_related.png`
 - `outputs/abstract_draft.txt`
 - `outputs/reproducibility_report.json`
 - `outputs/robustness_report.json`
@@ -213,6 +220,7 @@ This repository is useful if you want to demonstrate that you can:
 - separate governance, empirical work, and audit
 - build reproducible starter pipelines with intermediate outputs
 - think about measurement and validity, not only automation
+- export basic research artifacts such as figures and audit reports
 
 In other words, this is not just an AI demo. It is a **research systems prototype**.
 
