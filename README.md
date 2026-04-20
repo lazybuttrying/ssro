@@ -10,7 +10,7 @@ This repository is a **research infrastructure prototype**. It treats social sci
 
 The goal is not to fully automate research. The goal is to make research workflows more **structured, reproducible, interpretable, and accountable**.
 
-> Recommended future repo name: `social-science-research-os`
+> Recommended future repo name: `SSRO`
 
 ---
 
@@ -92,7 +92,7 @@ This topic is only the **first application package**. The architecture is meant 
 ## Repository layout
 
 ```text
-social-science-research-os/
+SSRO/
 ├─ README.md
 ├─ requirements.txt
 ├─ pyproject.toml
@@ -234,7 +234,7 @@ That is acceptable for a starter repo, but the next stage should replace toy com
 
 ## Suggested next steps
 
-- rename the repository to `social-science-research-os`
+- rename the repository to `SSRO`
 - replace synthetic data with real job-postings or domain-specific data
 - add LLM-backed literature extraction and theory memo generation
 - add richer measurement protocols and codebooks
