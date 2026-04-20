@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict
 
+import matplotlib.pyplot as plt
 import pandas as pd
 
 from ..base import BaseAgent
@@ -119,11 +120,16 @@ class IdentificationAnalysisAgent(BaseAgent):
         data_path = Path(context["MeasurementAgent"]["measured_data_path"])
         df = pd.read_csv(data_path)
 
+        mean_wage_by_ai_related = df.groupby("ai_related")["wage_posted"].mean()
+        mean_wage_by_high_skill_job = df.groupby("high_skill_job")["wage_posted"].mean()
+        mean_ai_exposure_by_education = df.groupby("education")["ai_exposure_score"].mean()
+        share_high_skill_by_ai_related = df.groupby("ai_related")["high_skill_job"].mean()
+
         summary = {
-            "mean_wage_by_ai_related": df.groupby("ai_related")["wage_posted"].mean().to_dict(),
-            "mean_wage_by_high_skill_job": df.groupby("high_skill_job")["wage_posted"].mean().to_dict(),
-            "mean_ai_exposure_by_education": df.groupby("education")["ai_exposure_score"].mean().to_dict(),
-            "share_high_skill_by_ai_related": df.groupby("ai_related")["high_skill_job"].mean().to_dict()
+            "mean_wage_by_ai_related": mean_wage_by_ai_related.to_dict(),
+            "mean_wage_by_high_skill_job": mean_wage_by_high_skill_job.to_dict(),
+            "mean_ai_exposure_by_education": mean_ai_exposure_by_education.to_dict(),
+            "share_high_skill_by_ai_related": share_high_skill_by_ai_related.to_dict()
         }
 
         simple_gap = (
@@ -131,9 +137,20 @@ class IdentificationAnalysisAgent(BaseAgent):
             - float(df[df["high_skill_job"] == 0]["wage_posted"].mean())
         )
 
+        fig_path = self.output_dir / "figure_wage_by_ai_related.png"
+        fig, ax = plt.subplots(figsize=(6, 4))
+        mean_wage_by_ai_related.plot(kind="bar", ax=ax)
+        ax.set_title("Mean posted wage by AI-related posting")
+        ax.set_xlabel("AI related")
+        ax.set_ylabel("Mean posted wage")
+        fig.tight_layout()
+        fig.savefig(fig_path, dpi=150)
+        plt.close(fig)
+
         analysis_results = {
             "descriptive_summary": summary,
             "high_skill_wage_gap": simple_gap,
+            "figure_path": str(fig_path),
             "interpretation": [
                 "In this toy dataset, AI-related postings are associated with higher posted wages.",
                 "High-skill jobs display a substantial wage premium relative to lower-skill jobs.",
