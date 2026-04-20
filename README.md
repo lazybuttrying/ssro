@@ -16,6 +16,14 @@ The goal is not to fully automate research. The goal is to make research workflo
 
 ---
 
+## Start here
+
+- `Tutorial/01_quickstart.md`
+- `Tutorial/02_outputs_walkthrough.md`
+- `docs/implementation_checklist.md`
+
+---
+
 ## Why this project exists
 
 In real social science research, one person often has to do everything at once:
@@ -79,8 +87,11 @@ The current example uses a small synthetic job-postings dataset and demonstrates
 - data cleaning
 - variable construction
 - AI exposure measurement
+- measurement registry generation
+- design registry generation
 - simple descriptive inequality analysis
 - figure export
+- working note generation
 - reproducibility and validity reporting
 
 This topic is only the **first application package**. The architecture is meant to be topic-agnostic and reusable for domains such as:
@@ -101,6 +112,8 @@ SSRO/
 ├─ pyproject.toml
 ├─ Makefile
 ├─ main.py
+├─ Tutorial/
+├─ applications/
 ├─ configs/
 ├─ data/
 ├─ docs/
@@ -111,8 +124,10 @@ SSRO/
 
 ### Important folders
 
-- `research_os/` — core package for orchestration and agents
-- `docs/` — architecture, agent responsibilities, measurement design, causal design, and outputs
+- `research_os/` — core package for orchestration, storage, schemas, and agents
+- `Tutorial/` — guided walkthroughs for first-time readers
+- `applications/` — topic-specific application packages
+- `docs/` — architecture, agent responsibilities, measurement design, causal design, and implementation checklist
 - `data/raw/` — starter input data
 - `outputs/` — generated artifacts from the pipeline
 - `tests/` — smoke tests and unit tests
@@ -144,6 +159,7 @@ A more detailed explanation is in:
 - `docs/causal_design.md`
 - `docs/outputs.md`
 - `docs/demo_run.md`
+- `docs/implementation_checklist.md`
 
 ---
 
@@ -188,13 +204,18 @@ Running `python main.py` creates:
 - `outputs/cleaned_data.csv`
 - `outputs/measured_data.csv`
 - `outputs/codebook.json`
+- `outputs/measurement_registry.json`
+- `outputs/design_registry.json`
+- `outputs/research_entities.json`
 - `outputs/analysis_results.json`
 - `outputs/figure_wage_by_ai_related.png`
 - `outputs/abstract_draft.txt`
+- `outputs/working_note.md`
 - `outputs/reproducibility_report.json`
 - `outputs/robustness_report.json`
 - `outputs/bias_validity_report.json`
 - `outputs/provenance_log.json`
+- `outputs/ssro.duckdb`
 
 These files are meant to model a research workflow with explicit intermediate artifacts rather than just a final answer.
 
@@ -220,7 +241,8 @@ This repository is useful if you want to demonstrate that you can:
 - separate governance, empirical work, and audit
 - build reproducible starter pipelines with intermediate outputs
 - think about measurement and validity, not only automation
-- export basic research artifacts such as figures and audit reports
+- export basic research artifacts such as figures, registries, and audit reports
+- back research artifacts with lightweight local data infrastructure using DuckDB
 
 In other words, this is not just an AI demo. It is a **research systems prototype**.
 
@@ -235,6 +257,7 @@ The current repository is intentionally minimal.
 - the literature mapping is hand-coded rather than model-backed
 - measurement is based on simple keyword proxies
 - audit is illustrative rather than exhaustive
+- Redis and retrieval helpers are scaffolding for future expansion rather than full production subsystems
 
 That is acceptable for a starter repo, but the next stage should replace toy components with real research-grade modules.
 
