@@ -58,7 +58,8 @@ class DataConstructionAgent(BaseAgent):
         super().__init__("DataConstructionAgent", output_dir)
 
     def run(self, task: ResearchTask, context: Dict[str, Any]) -> AgentOutput:
-        data_path = Path("data/raw/sample_job_postings.csv")
+        settings = context.get("__settings__", {})
+        data_path = Path(settings.get("data_path", "data/raw/sample_job_postings.csv"))
         df = pd.read_csv(data_path)
         df["education"] = df["education"].fillna("Unknown")
         df["wage_posted"] = pd.to_numeric(df["wage_posted"], errors="coerce")
