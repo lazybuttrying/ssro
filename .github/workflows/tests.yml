@@ -25,5 +25,11 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
+      - name: Debug paths
+        run: |
+          pwd
+          ls -R
+          python -c "import sys; print(sys.path)"
+
       - name: Run tests
-        run: pytest
+        run: pytest -q
