@@ -1,0 +1,7 @@
+project_name: SSRO
+default_application: labor_market_inequality
+data_path: data/raw/sample_job_postings.csv
+output_dir: outputs
+duckdb_path: outputs/ssro.duckdb
+build_paper: true
+build_slides: true
