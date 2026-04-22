@@ -3,6 +3,9 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict
 
+from hooks.check_measurement_ready import check_measurement_ready
+from hooks.check_outputs_ready import check_outputs_ready
+
 from .agents.audit import (
     BiasValidityAuditAgent,
     ReproducibilityAgent,
@@ -22,9 +25,10 @@ from .types import ResearchTask
 
 
 class ResearchOS:
-    def __init__(self, output_dir: Path):
+    def __init__(self, output_dir: Path, settings: dict | None = None):
         self.output_dir = output_dir
         self.context: Dict[str, Dict[str, Any]] = {}
+        self.context["__settings__"] = settings or {}
 
         self.provenance = ProvenanceManager(output_dir)
         self.research_director = ResearchDirectorAgent(output_dir)
@@ -62,6 +66,11 @@ class ResearchOS:
         self._store(out)
         self.provenance.record("measurement_completed", {"variables": list(out.payload["codebook"].keys())})
 
+        ok, msg = check_measurement_ready(self.output_dir)
+        if not ok:
+            raise RuntimeError(msg)
+        self.provenance.record("measurement_gate_passed", {"message": msg})
+
         out = self.analysis.run(task, self.context)
         self._store(out)
         self.provenance.record("analysis_completed", {"high_skill_wage_gap": out.payload["high_skill_wage_gap"]})
@@ -70,13 +79,19 @@ class ResearchOS:
         self._store(out)
         self.provenance.record("writing_completed", {"abstract_length": len(out.payload["abstract"])})
 
-        out = self.paper_latex.run(task, self.context)
-        self._store(out)
-        self.provenance.record("paper_latex_completed", out.payload)
+        ok, msg = check_outputs_ready(self.output_dir)
+        if ok:
+            self.provenance.record("output_gate_passed", {"message": msg})
 
-        out = self.slides_latex.run(task, self.context)
-        self._store(out)
-        self.provenance.record("slides_latex_completed", out.payload)
+            out = self.paper_latex.run(task, self.context)
+            self._store(out)
+            self.provenance.record("paper_latex_completed", out.payload)
+
+            out = self.slides_latex.run(task, self.context)
+            self._store(out)
+            self.provenance.record("slides_latex_completed", out.payload)
+        else:
+            self.provenance.record("output_gate_blocked", {"message": msg})
 
         out = self.reproducibility.run(task, self.context)
         self._store(out)
