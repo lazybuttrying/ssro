@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}
 
     steps:
       - name: Checkout
@@ -30,6 +32,7 @@ jobs:
           pwd
           ls -R
           python -c "import sys; print(sys.path)"
+          python -c "import research_os; print(research_os.__file__)"
 
       - name: Run tests
         run: pytest -q
